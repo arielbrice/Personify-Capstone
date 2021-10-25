@@ -17,7 +17,4 @@ with open("keywords.txt") as keywordFile:
         print("\n",keyword)
         for idx, track in enumerate(results['tracks']['items']):
             print(idx, track['name'])
-<<<<<<< HEAD
-=======
     keywordFile.close()
->>>>>>> a51b8975f12eda98032fa5e8d470a5c2979d5963
