@@ -8,13 +8,12 @@ app.secret_key = "0Ncs92894fhno"
 app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 TOKEN_INFO = "token_info"
 
-
 def readFile():
     with open("secret.txt") as file:
    # print(file.readline(), file.readline())
         clientid = file.readline()
         clientsecret = file.readline()
-readFile()
+        return clientid, clientsecret
 
 
 @app.route('/')
@@ -65,5 +64,6 @@ def getToken():
 
 
 def create_spotify_oauth():
+    clientid, clientsecret = readFile()
     return SpotifyOAuth(client_id= clientid, client_secret=clientsecret,
     redirect_uri=url_for('redirectPage', _external = True), scope="user-library-read")
