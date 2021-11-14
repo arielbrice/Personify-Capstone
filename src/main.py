@@ -9,8 +9,8 @@ import os;
 with open("secret.txt") as file:
    # print(file.readline(), file.readline())
    clientid = file.readline()
-   clientsecret = file.readline()
-   print(clientid,clientsecret)
+   clientsecret = file.readline().strip()
+   print(clientid+clientsecret)
    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=clientid, client_secret=clientsecret))
 # Limit of the number in a search is 50, You can not search for more items than 50 at a time
 #results = sp.search(q='Cancer', limit=50)

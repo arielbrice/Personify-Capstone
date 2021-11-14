@@ -11,8 +11,8 @@ TOKEN_INFO = "token_info"
 def readFile():
     with open("secret.txt") as file:
    # print(file.readline(), file.readline())
-        clientid = file.readline()
-        clientsecret = file.readline()
+        clientid = file.readline().strip()
+        clientsecret = file.readline().strip()
         return clientid, clientsecret
 
 
@@ -20,6 +20,7 @@ def readFile():
 def login():
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
+    print(auth_url)
     return redirect(auth_url)
 
 @app.route('/redirect')
@@ -36,19 +37,19 @@ def getTracks():
     try:
         token_info = getToken()
     except:
-        print("user no logged in")
-        return redirect(url_for('login', _external = False))
+        print("user not logged in")
+        return redirect(url_for('login', _external=False))
     sp = spotipy.Spotify(auth=token_info['access_token'])
     all_songs = []
-    iter = 0;
+    iter = 0
     while True:
         items = sp.current_user_saved_tracks(limit=50, offset=iter * 50)['items']
         iter += 1
         all_songs += items
         if(len(items) < 50):
             break
-    return sp.current_user()['display_name'] + " has " +  str(len(all_songs)) + " saved tracks"
-
+    return str(len(all_songs))
+   
 
 
 def getToken():
@@ -65,5 +66,5 @@ def getToken():
 
 def create_spotify_oauth():
     clientid, clientsecret = readFile()
-    return SpotifyOAuth(client_id= clientid, client_secret=clientsecret,
-    redirect_uri=url_for('redirectPage', _external = True), scope="user-library-read")
+    return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
+        redirect_uri=url_for('redirectPage', _external = True), scope="user-library-read")
