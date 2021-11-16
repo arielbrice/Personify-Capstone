@@ -30,7 +30,7 @@ def redirectPage():
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
     session[TOKEN_INFO] = token_info
-    return redirect(url_for('getTracks', _external=True))
+    return redirect(url_for('getSongs', _external=True))
 
 @app.route('/getTracks')
 def getTracks():
@@ -50,7 +50,24 @@ def getTracks():
             break
     return str(len(all_songs))
    
-
+@app.route('/getSongs')
+def getSongs():
+    try:
+        token_info = getToken()
+    except:
+        print("user not logged in")
+        return redirect(url_for('login', _external=False))
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    songlist = []
+    with open("keywords2.txt") as keywordFile:
+        for keyword in keywordFile:
+            results = sp.search(q = keyword, limit=10)
+            #print("\n",keyword)
+            for idx, track in enumerate(results['tracks']['items']):
+                songlist += idx , track['name'], "\n"
+                #print(idx, track['name'])
+                print(songlist)
+    return str(songlist)
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)
