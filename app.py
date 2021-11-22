@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, session, redirect
+from flask import Flask, request, url_for, session, redirect, render_template
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
@@ -16,6 +16,10 @@ def readFile():
         return clientid, clientsecret
 
 
+@app.route('/home')
+def homepage():
+    return render_template("home.html")
+
 @app.route('/')
 def login():
     sp_oauth = create_spotify_oauth()
@@ -31,6 +35,18 @@ def redirectPage():
     token_info = sp_oauth.get_access_token(code)
     session[TOKEN_INFO] = token_info
     return redirect(url_for('getSongs', _external=True))
+    #return redirect(url_for('user', _external=True))
+
+@app.route('/user')
+def user():
+    try:
+        token_info = getToken()
+    except:
+        print("user not logged in")
+        return redirect(url_for('login', _external=False))
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    name = sp.me()['display_name']
+    return render_template("index.html", name = name)
 
 @app.route('/getTracks')
 def getTracks():
@@ -42,13 +58,15 @@ def getTracks():
     sp = spotipy.Spotify(auth=token_info['access_token'])
     all_songs = []
     iter = 0
+    print(sp.me())
     while True:
         items = sp.current_user_saved_tracks(limit=50, offset=iter * 50)['items']
         iter += 1
         all_songs += items
         if(len(items) < 50):
             break
-    return str(len(all_songs))
+      
+    return "This is the amount of liked songs that " + sp.me()['display_name'] + " has: "+ str(len(all_songs))
    
 @app.route('/getSongs')
 def getSongs():
@@ -64,10 +82,10 @@ def getSongs():
             results = sp.search(q = keyword, limit=10)
             #print("\n",keyword)
             for idx, track in enumerate(results['tracks']['items']):
-                songlist += idx , track['name'], "\n"
+                songlist += idx , track['name']
                 #print(idx, track['name'])
-                print(songlist)
-    return str(songlist)
+                #print(songlist)
+    return "These are some songs we reccomend for a leo: " + str(songlist)
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)

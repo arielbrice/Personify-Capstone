@@ -2,3 +2,5 @@ secret.txt
 .cache
 __pycache__/app.cpython-39.pyc
 src/__pycache__/app.cpython-39.pyc
+templates/styles/style.css
+templates/styles/style.css.map

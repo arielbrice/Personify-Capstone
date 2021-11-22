@@ -16,9 +16,10 @@ with open("secret.txt") as file:
 #results = sp.search(q='Cancer', limit=50)
 #for idx, track in enumerate(results['tracks']['items']):
 #    print("Cancer:",idx, track['name'])
-
-#print(sp.artist("https://open.spotify.com/artist/6vWDO969PvNqNYHIOW5v0m?si=AWecjQtFSxK7gHyyOnDFTw"))
-print(sp.user("dakotajamesspears"))
+#print(sp.current_user)
+print(sp.track("https://open.spotify.com/track/1oew3nFNY3vMacJAsvry0S?si=28a86dcb03774c3c"))
+print(sp.artist("https://open.spotify.com/artist/6vWDO969PvNqNYHIOW5v0m?si=AWecjQtFSxK7gHyyOnDFTw"))
+#print(sp.user("dakotajamesspears"))
 
 
 with open("keywords.txt") as keywordFile:
@@ -29,3 +30,5 @@ with open("keywords.txt") as keywordFile:
             print(idx, track['name'])
 
             
+def test():
+    return "hello"
