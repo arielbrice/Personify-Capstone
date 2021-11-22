@@ -3,6 +3,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
 app = Flask(__name__)
+import userTaste
+from userTaste import printtopA, topArtists, topTracks
+
 
 app.secret_key = "0Ncs92894fhno"
 app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
@@ -18,6 +21,7 @@ def readFile():
 
 @app.route('/home')
 def homepage():
+    
     return render_template("home.html")
 
 @app.route('/')
@@ -34,7 +38,7 @@ def redirectPage():
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
     session[TOKEN_INFO] = token_info
-    return redirect(url_for('getSongs', _external=True))
+    return redirect(url_for('user', _external=True))
     #return redirect(url_for('user', _external=True))
 
 @app.route('/user')
@@ -46,6 +50,8 @@ def user():
         return redirect(url_for('login', _external=False))
     sp = spotipy.Spotify(auth=token_info['access_token'])
     name = sp.me()['display_name']
+    clientid, clientsecret = readFile()
+    topTracks(sp)
     return render_template("index.html", name = name)
 
 @app.route('/getTracks')
@@ -80,12 +86,34 @@ def getSongs():
     with open("keywords2.txt") as keywordFile:
         for keyword in keywordFile:
             results = sp.search(q = keyword, limit=10)
-            #print("\n",keyword)
+            print("\n",keyword)
             for idx, track in enumerate(results['tracks']['items']):
                 songlist += idx , track['name']
                 #print(idx, track['name'])
                 #print(songlist)
     return "These are some songs we reccomend for a leo: " + str(songlist)
+
+@app.route('/topTracks')
+def trackTop():
+    try:
+        token_info = getToken()
+    except:
+        print("user not logged in")
+        return redirect(url_for('login', _external=False))
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+
+    return "tracks: " + topTracks(sp)
+
+@app.route('/topArtists')
+def artistTop():
+    try:
+        token_info = getToken()
+    except:
+        print("user not logged in")
+        return redirect(url_for('login', _external=False))
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    
+    return "artists: " + topArtists(sp)
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)
@@ -102,4 +130,4 @@ def getToken():
 def create_spotify_oauth():
     clientid, clientsecret = readFile()
     return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
-        redirect_uri=url_for('redirectPage', _external = True), scope="user-library-read")
+        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read') #scope = "user-library-read")
