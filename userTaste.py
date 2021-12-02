@@ -10,8 +10,10 @@ def topTracks(sp):
     tracks = sp.current_user_top_tracks(limit=50,  time_range= 'short_term')
     track = []
     for item in tracks['items']:
-        track += (item['name']) + " "
+        track += (item['name']) + " \n"
     topT = listToString(track)
+    with open("ArielTopTracks.txt", "w") as file:
+        file.write(topT)
     return topT
     #print(tracks)
 
