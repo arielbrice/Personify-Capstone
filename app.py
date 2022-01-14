@@ -3,8 +3,9 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
 app = Flask(__name__)
-import userTaste
-from userTaste import printtopA, topArtists, topTracks
+from src.user.userTaste import printtopA, topArtists, topTracks
+from src.model.GeneralModel import showSongNames
+
 
 
 app.secret_key = "0Ncs92894fhno"
@@ -115,6 +116,16 @@ def artistTop():
     
     return "artists: " + topArtists(sp)
 
+@app.route('/playlist')
+def makePlaylist():
+    try:
+        token_info = getToken()
+    except:
+        print("user not logged in")
+        return redirect(url_for('login', _external=False))
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    return showSongNames(sp)
+
 def getToken():
     token_info = session.get(TOKEN_INFO, None)
     if not token_info:
@@ -130,4 +141,4 @@ def getToken():
 def create_spotify_oauth():
     clientid, clientsecret = readFile()
     return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
-        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read') #scope = "user-library-read")
+        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private') #scope = "user-library-read")
