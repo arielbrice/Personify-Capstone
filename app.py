@@ -5,7 +5,7 @@ import time
 app = Flask(__name__)
 from src.user.userTaste import printtopA, topArtists, topTracks
 from src.model.GeneralModel import showSongNames
-
+import database.mongo_setup as mongo_setup
 
 
 app.secret_key = "0Ncs92894fhno"
@@ -22,7 +22,7 @@ def readFile():
 
 @app.route('/home')
 def homepage():
-    
+    mongo_setup.global_init()
     return render_template("home.html")
 
 @app.route('/')
