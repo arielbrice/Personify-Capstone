@@ -122,6 +122,7 @@ def compareFeatures():
 
     return keep
 
+# playlist to keep in database as list(?)
 def showSongNames(sp):
     songs = compareFeatures()
     sp = authorizeFromSecret()

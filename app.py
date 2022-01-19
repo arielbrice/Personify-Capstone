@@ -25,11 +25,17 @@ def homepage():
     mongo_setup.global_init()
     return render_template("home.html")
 
+# user id to be passed to db
 @app.route('/')
 def login():
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
     print(auth_url)
+    token_info = getToken()
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    user_dict = sp.me()
+    id = user_dict['id']
+
     return redirect(auth_url)
 
 @app.route('/redirect')
