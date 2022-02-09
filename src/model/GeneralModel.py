@@ -19,7 +19,7 @@ returns list of ids
 '''
 def storeIDs():
     idList = []
-    with open("src/data/GretaTopTrackIDs.txt", encoding="UTF-8") as songFile:
+    with open("src/data/HannahTopTrackIDs.txt", encoding="UTF-8") as songFile:
         for line in songFile:
             idList.append(line.strip())
     return idList
@@ -58,7 +58,7 @@ def getAudioAnalysis():
                         song.append(vals)
             indvSongsAndFeatures.append(song)
 
-    with open("src/data/gen-mod-aquarius-features-cass.csv", encoding="UTF-8") as featfile:
+    with open("src/data/gen-mod-features.csv", encoding="UTF-8") as featfile:
         atts = featfile.readline().split(",")
         genSongsAndFeatures = []
 
@@ -118,18 +118,21 @@ def compareFeatures():
     for song in discard:
         if song in keep:
             keep.remove(song)
-    print(len(keep))
+    if(len(keep) == 0):
+        return discard
 
     return keep
 
 # playlist to keep in database as list(?)
 def showSongNames(sp):
     songs = compareFeatures()
+    print("length: ",len(songs))
     sp = authorizeFromSecret()
-    playlist = sp.user_playlist_create("hannahsiitia", "Greta's Personify Recs", public = False, description= "This playlist was made using your Zodiac sign and machine learning!")
+    playlist = sp.user_playlist_create("hannahsiitia", "Test Personify Recs", public = False, description= "This playlist was made using your Zodiac sign and machine learning!")
     playlist_id = playlist["id"]
     sp.playlist_add_items(playlist_id, songs, position=None)
-    return playlist
+
+    return playlist_id
 
 
 

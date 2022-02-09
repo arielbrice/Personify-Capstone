@@ -1,32 +1,22 @@
 import mongoengine
+import pymongo
+from bson import ObjectId
 from pymongo import MongoClient
 import os
 import datetime
 import pprint
 
-client = MongoClient()
 client = MongoClient('localhost', 27017)
-db = client.test_database
-posts = db.posts
+db = client['personify']
+userCollection = db['users']
 
-def testInsert():
-    post = {"author": "Hannah",
-         "text": "My first blog post!",
-         "tags": ["mongodb", "python", "pymongo"],
-         "date": datetime.datetime.utcnow()}
-
-    post_id = posts.insert_one(post).inserted_id
-    print(post_id)
-
-def testFind():
-    for post in posts.find():
-        pprint.pprint(post)
-testInsert()
-testFind()
-
-
-
-
-
+# couldn't tell you what this is for
 def global_init():
     mongoengine.register_connection(alias = 'core', name = 'personify')
+
+def userExists(id):
+    userid = id
+    if(len(list(userCollection.find({"user_id" : id}))) == 0):
+        return False
+    else:
+        return True

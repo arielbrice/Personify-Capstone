@@ -8,7 +8,7 @@ class User(mongoengine.Document):
     # Spotify API
     user_id = mongoengine.StringField(required=True)
     username = mongoengine.StringField(required=True)
-    sign = mongoengine.StringField(required=True)
+    #sign = mongoengine.StringField(required=True)
     playlist = mongoengine.ListField(required=False)
 
     meta = {
