@@ -20,12 +20,23 @@ def readFile():
         return clientid, clientsecret
 
 
-@app.route('/home')
+@app.route('/')
 def homepage():
-    
     return render_template("home.html")
 
-@app.route('/')
+@app.route('/home')
+def home():
+    return homepage()
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
+@app.route('/login')
 def login():
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
@@ -53,7 +64,7 @@ def user():
     name = sp.me()['display_name']
     clientid, clientsecret = readFile()
     topTracks(sp)
-    return render_template("index.html", name = name)
+    return render_template("user.html", name = name)
 
 @app.route('/getTracks')
 def getTracks():
