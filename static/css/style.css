@@ -1,19 +1,12 @@
-#scrollmenu {
-  color: blue;
-}
-
-.home-btn button {
-  color: blue;
-  font-size: 2334px;
-}
-
 body {
   background-color: #8888dc;
 }
 
 .scrollmenu {
   overflow: hidden;
-  background-color: lavender;
+  background-color: pink;
   font-family: Arial;
+  color: pink;
+  text-align: right;
 }
 /*# sourceMappingURL=style.css.map */
