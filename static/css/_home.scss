@@ -2,6 +2,21 @@
 body{
     background-color: $lightLavender;
 }
+.homeitem{
+    color: purple;
+}
+.box{
+    border: 1px solid blue;
+    border-radius: 5%;
+    background-color: rgba(230, 230, 250, 0.493);
+    box-shadow: 2px 2px black;
+    width: 50%;
+    height: 70%;
+    margin: 2.5%;
+    padding: 2%;
+    text-size-adjust: 100%;
+    overflow:scroll;
+}
 .scrollmenu{
  overflow: hidden;
   background-color: pink;
@@ -9,3 +24,4 @@ body{
   color: pink;
   text-align: right;
 }
+    

@@ -2,6 +2,27 @@ body {
   background-color: #8888dc;
 }
 
+.homeitem {
+  color: purple;
+}
+
+.box {
+  border: 1px solid blue;
+  border-radius: 5%;
+  background-color: rgba(230, 230, 250, 0.493);
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 50%;
+  height: 70%;
+  margin: 2.5%;
+  padding: 2%;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+  overflow: scroll;
+}
+
 .scrollmenu {
   overflow: hidden;
   background-color: pink;
