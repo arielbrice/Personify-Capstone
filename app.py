@@ -121,6 +121,9 @@ def makePlaylist():
         print("user not logged in")
         return redirect(url_for('login', _external=False))
     sp = spotipy.Spotify(auth=token_info['access_token'])
+
+    user = sp.me()
+    id = user['id']
     playlist = showSongNames(sp)
     maps = sp.playlist_tracks(playlist)
     titles = []

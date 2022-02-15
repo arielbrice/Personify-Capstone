@@ -20,3 +20,9 @@ def userExists(id):
         return False
     else:
         return True
+
+def updatePlaylist(id, tracks):
+    userid = id
+    playlist = tracks
+
+    userCollection.
