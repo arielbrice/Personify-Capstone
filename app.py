@@ -18,6 +18,13 @@ mongo_setup.global_init()
 '''
 helper function for retrieving client id and secret for oauth
 '''
+def getEntity(id, username):
+    user = User()
+    user.user_id = id
+    user.username = username
+    user.save()
+    return user
+
 def readFile():
     with open("secret.txt") as file:
         clientid = file.readline().strip()
@@ -42,6 +49,7 @@ as documents for new user entry.
 '''
 @app.route('/')
 def login():
+
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
 
@@ -58,15 +66,16 @@ def login():
     id = user_dict['id']
     username = user_dict['display_name']
 
-    if(mongo_setup.userExists(id)):
-        redirect(auth_url)
+    user = getEntity(id, username)
 
-    else:
-        user = User()
-        user.user_id = id
-        user.username = username
-        user.save()
-        redirect(auth_url)
+   # if(mongo_setup.userExists(id)):
+    #    redirect(auth_url)
+
+    #else:
+    user.user_id = id
+    user.username = username
+    user.save()
+    redirect(auth_url)
     return redirect(auth_url)
 
 @app.route('/redirect')
@@ -122,15 +131,16 @@ def makePlaylist():
         return redirect(url_for('login', _external=False))
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    user = sp.me()
-    id = user['id']
+    u = sp.me()
+    id = u['id']
+
     playlist = showSongNames(sp)
     maps = sp.playlist_tracks(playlist)
     titles = []
     for item in maps['items']:
         titles.append(item['track']['name'])
-
-    return titles
+    user.playlist = titles
+    return ' '.join(titles)
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)
