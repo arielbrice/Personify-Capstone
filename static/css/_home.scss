@@ -5,6 +5,14 @@ body{
 .homeitem{
     color: purple;
 }
+
+.scrollmenu{
+ overflow: hidden;
+  background-color: pink;
+  font-family: Arial;
+  color: pink;
+  text-align: right;
+}
 .box{
     border: 1px solid blue;
     border-radius: 5%;
@@ -15,13 +23,10 @@ body{
     margin: 2.5%;
     padding: 2%;
     text-size-adjust: 100%;
-    overflow:scroll;
+    overflow: scroll;
 }
-.scrollmenu{
- overflow: hidden;
-  background-color: pink;
-  font-family: Arial;
-  color: pink;
-  text-align: right;
-}
+
+.box::-webkit-scrollbar {
+    display: none;
+  }
     

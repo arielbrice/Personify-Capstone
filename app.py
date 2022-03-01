@@ -153,3 +153,4 @@ def create_spotify_oauth():
     clientid, clientsecret = readFile()
     return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
         redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private') #scope = "user-library-read")
+        
