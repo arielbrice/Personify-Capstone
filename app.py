@@ -30,16 +30,21 @@ def readFile():
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
         return clientid, clientsecret
-
-
-'''
-Leads to white page black-text screen. Needed?
-'''
-@app.route('/home')
+@app.route('/')
 def homepage():
-    #mongo_setup.global_init()
     return render_template("home.html")
 
+@app.route('/home')
+def home():
+    return homepage()
+
+@app.route('/contact')
+def contact():
+    return render_template("contact.html")
+
+@app.route('/about')
+def about():
+    return render_template("about.html")
 
 '''
 Allows user to allow access to their Spotify info via Spotify auth page.
@@ -47,7 +52,7 @@ If the user is new, add a new entry into the database (user entity).
 Using the spotipy .me() function, retrieve user display name and ID to send
 as documents for new user entry. 
 '''
-@app.route('/')
+@app.route('/login')
 def login():
 
     sp_oauth = create_spotify_oauth()
@@ -97,7 +102,7 @@ def user():
     sp = spotipy.Spotify(auth=token_info['access_token'])
     name = sp.me()['display_name']
     topTracks(sp)
-    return render_template("index.html", name = name)
+    return render_template("user.html", name = name)
 
 '''
 primitive example for generating recs using astrology keywords as spotify search queries.
