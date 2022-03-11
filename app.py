@@ -7,17 +7,29 @@ from src.user.userTaste import topArtists, topTracks
 from src.model.GeneralModel import showSongNames
 import database.mongo_setup as mongo_setup
 from database.user import User
+from pymongo import MongoClient
+import mongoengine
 
 
 app.secret_key = "0Ncs92894fhno"
 app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 TOKEN_INFO = "token_info"
 
-mongo_setup.global_init()
+with open("dbconnection.txt") as file:
+    connectionString = file.readline().strip()
 
-'''
-helper function for retrieving client id and secret for oauth
-'''
+
+
+
+def getmongoClient():
+    client = MongoClient(connectionString)
+    db = client['Personify']
+    userCollection = db['Users']
+    mongo_setup.global_init()
+    mongoengine.connect(alias='pers-db', host=connectionString)
+    return userCollection
+
+
 def getEntity(id, username):
     user = User()
     user.user_id = id
@@ -25,11 +37,29 @@ def getEntity(id, username):
     user.save()
     return user
 
+def getToken():
+    token_info = session.get(TOKEN_INFO, None)
+    if not token_info:
+        raise "exception"
+    now = int(time.time())
+    is_expired = token_info['expires_at'] - now < 60
+    if(is_expired):
+        sp_oauth = create_spotify_oauth()
+        token_info = sp_oauth.get_refresh_access_token(token_info['refresh_token'])
+    return token_info
+
+def create_spotify_oauth():
+    clientid, clientsecret = readFile()
+    return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
+        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private') #scope = "user-library-read")
+
 def readFile():
     with open("secret.txt") as file:
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
         return clientid, clientsecret
+
+
 @app.route('/')
 def homepage():
     return render_template("home.html")
@@ -54,10 +84,8 @@ as documents for new user entry.
 '''
 @app.route('/login')
 def login():
-
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
-
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
     try:
@@ -65,22 +93,18 @@ def login():
     except:
         print("user not logged in")
 
+    coll = getmongoClient()
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
     user_dict = sp.me()
     id = user_dict['id']
     username = user_dict['display_name']
+    if(mongo_setup.userExists(id, coll) == False):
+        getEntity(id, username)
+        redirect(auth_url)
+    else:
+        redirect(auth_url)
 
-    user = getEntity(id, username)
-
-   # if(mongo_setup.userExists(id)):
-    #    redirect(auth_url)
-
-    #else:
-    user.user_id = id
-    user.username = username
-    user.save()
-    redirect(auth_url)
     return redirect(auth_url)
 
 @app.route('/redirect')
@@ -104,29 +128,6 @@ def user():
     topTracks(sp)
     return render_template("user.html", name = name)
 
-'''
-primitive example for generating recs using astrology keywords as spotify search queries.
-'''
-'''
-@app.route('/getSongs')
-def getSongs():
-    try:
-        token_info = getToken()
-    except:
-        print("user not logged in")
-        return redirect(url_for('login', _external=False))
-    sp = spotipy.Spotify(auth=token_info['access_token'])
-    songlist = []
-    with open("keywords2.txt") as keywordFile:
-        for keyword in keywordFile:
-            results = sp.search(q = keyword, limit=10)
-            print("\n",keyword)
-            for idx, track in enumerate(results['tracks']['items']):
-                songlist += idx , track['name']
-
-    return "These are some songs we reccomend for a leo: " + str(songlist)
-'''
-
 @app.route('/playlist')
 def makePlaylist():
     try:
@@ -147,18 +148,3 @@ def makePlaylist():
     user.playlist = titles
     return ' '.join(titles)
 
-def getToken():
-    token_info = session.get(TOKEN_INFO, None)
-    if not token_info:
-        raise "exception"
-    now = int(time.time())
-    is_expired = token_info['expires_at'] - now < 60
-    if(is_expired):
-        sp_oauth = create_spotify_oauth()
-        token_info = sp_oauth.get_refresh_access_token(token_info['refresh_token'])
-    return token_info
-
-def create_spotify_oauth():
-    clientid, clientsecret = readFile()
-    return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
-        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private') #scope = "user-library-read")

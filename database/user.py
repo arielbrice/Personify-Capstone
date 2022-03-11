@@ -12,5 +12,5 @@ class User(mongoengine.Document):
     playlist = mongoengine.ListField(required=False)
 
     meta = {
-        'db_alias': 'core',
-        'collection': 'users'}
+        'db_alias': 'pers-db',
+        'collection': 'Users'}
