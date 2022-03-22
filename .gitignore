@@ -5,3 +5,5 @@ __pycache__
 src/__pycache_
 templates/styles/style.css
 templates/styles/style.css.map
+.vs
+.idea
