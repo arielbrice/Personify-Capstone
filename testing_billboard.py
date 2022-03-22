@@ -4,6 +4,7 @@ import spotipy
 from spotipy import SpotifyClientCredentials
 
 from database import mongo_setup
+import sys
 
 with open("secret.txt", encoding="UTF-8") as file:
     clientid = file.readline().strip()
@@ -54,7 +55,7 @@ def get_spotify_stats(title, artist, track):
 def add_songs_to_db(song):
     mongo_setup.insertTrack(song)
 
-for year in range(1960,2021):
+for year in range(2020,2021):
     for i in months:
         chart = billboard.ChartData('hot-100', date='{0}-{1}-15'.format(str(year), i))
         chart_df = tuple_to_dict(chart)
@@ -65,14 +66,17 @@ for year in range(1960,2021):
             else query spotify for other info
             save info to db and continue
             """
-            result = sp.search(q = "{} {}".format(row['title'], row['artist']), limit=1)
-            track = result['tracks']['items']
-            stats = get_spotify_stats(row['title'], row['artist'], track)
-        #pass stats as dictionary or whatever formating is easiet after spotify query is done
-    #add_songs_to_db(row["title"], row["artist"], stats)
-
-    break
-        #chart_df.to_csv('hot-100-{0}-{1}-15.csv'.format(str(year), i), sep=',', encoding='utf-8')
+            if(mongo_setup.trackExists(row['title']) == False):
+                try:
+                    print("in try")
+                    result = sp.search(q = "{} {}".format(row['title'], row['artist']), limit=1)
+                    print(result)
+                except (RuntimeError, TypeError, NameError):
+                    print("somethings wrong")
+                    continue
+                track = result['tracks']['items']
+                stats = get_spotify_stats(row['title'], row['artist'], track)
+        chart_df.to_csv('hot-100-{0}-{1}-15.csv'.format(str(year), i), sep=',', encoding='utf-8')
 
 
 

@@ -37,10 +37,12 @@ def userExists(id, coll):
     else:
         return True
 
-def trackExists(id, coll):
-    if (coll.count_documents({"song_id": id.strip()}, limit=1) == 0):
+def trackExists(title):
+    coll = global_init()
+    if (coll.count_documents({"title": title.strip()}, limit=1) == 0):
         return False
     else:
+        print(title, "duplicate")
         return True
 
 def insertTrack(features):

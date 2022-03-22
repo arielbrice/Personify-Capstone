@@ -30,4 +30,4 @@ class Track(mongoengine.Document):
 
     meta = {
         'db_alias': 'pers-db',
-        'collection': 'Track'}
+        'collection': 'Tracks'}
