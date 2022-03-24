@@ -6,7 +6,7 @@ import flask
 import os
 
 
-with open("C:\\users\hanna\documents\capstone\Personify-Capstone\secret.txt") as file:
+with open("secret.txt") as file:
    # print(file.readline(), file.readline())
    clientid = file.readline()
    clientsecret = file.readline().strip()

@@ -4,7 +4,6 @@ from spotipy.oauth2 import SpotifyOAuth
 import time
 app = Flask(__name__)
 from src.user.userTaste import topArtists, topTracks
-from src.model.GeneralModel import showSongNames
 import database.mongo_setup as mongo_setup
 from database.user import User
 
@@ -63,7 +62,9 @@ def login():
     try:
         token_info = getToken()
     except:
+        
         print("user not logged in")
+        return redirect(auth_url)
 
     sp = spotipy.Spotify(auth=token_info['access_token'])
 
@@ -123,7 +124,6 @@ def getSongs():
             print("\n",keyword)
             for idx, track in enumerate(results['tracks']['items']):
                 songlist += idx , track['name']
-
     return "These are some songs we reccomend for a leo: " + str(songlist)
 '''
 
@@ -139,13 +139,15 @@ def makePlaylist():
     u = sp.me()
     id = u['id']
 
-    playlist = showSongNames(sp)
+    # TODO: get user's top artists and top tracks and train it on our model and then display the new playlist to the screen to allow user to save it
+    '''playlist = showSongNames(sp)
     maps = sp.playlist_tracks(playlist)
     titles = []
     for item in maps['items']:
         titles.append(item['track']['name'])
     user.playlist = titles
-    return ' '.join(titles)
+    return ' '.join(titles)'''
+    return id
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)
@@ -161,4 +163,4 @@ def getToken():
 def create_spotify_oauth():
     clientid, clientsecret = readFile()
     return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
-        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private') #scope = "user-library-read")
+        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private, user-library-read') 

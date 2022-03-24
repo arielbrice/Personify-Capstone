@@ -12,6 +12,7 @@ userCollection = db['users']
 
 # couldn't tell you what this is for
 def global_init():
+    mongoengine.connect()
     mongoengine.register_connection(alias = 'core', name = 'personify')
 
 def userExists(id):
