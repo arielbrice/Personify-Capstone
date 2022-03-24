@@ -128,7 +128,7 @@ def showSongNames(sp):
     songs = compareFeatures()
     print("length: ",len(songs))
     sp = authorizeFromSecret()
-    playlist = sp.user_playlist_create("hannahsiitia", "Test Personify Recs", public = False, description= "This playlist was made using your Zodiac sign and machine learning!")
+    playlist = sp.user_playlist_create(sp.me(), "Test Personify Recs", public = False, description= "This playlist was made using your Zodiac sign and machine learning!")
     playlist_id = playlist["id"]
     sp.playlist_add_items(playlist_id, songs, position=None)
 

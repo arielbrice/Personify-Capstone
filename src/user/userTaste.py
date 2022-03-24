@@ -12,8 +12,8 @@ def topTracks(sp):
     for item in tracks['items']:
         track += (item['id']) + " \n"
     topT = listToString(track)
-    with open("HannahTopTrackIDs.txt", "w", encoding="UTF-8") as file:
-        file.write(topT)
+    #with open("HannahTopTrackIDs.txt", "w", encoding="UTF-8") as file:
+        #file.write(topT)
     return topT
     #print(tracks)
 
