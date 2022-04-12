@@ -34,4 +34,97 @@ body {
 .box::-webkit-scrollbar {
   display: none;
 }
+
+.Ariel {
+  border: 1px solid blue;
+  border-radius: 5%;
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 29%;
+  height: 70%;
+  margin-top: 2%;
+  padding: 2%;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+  overflow: scroll;
+  float: left;
+}
+
+.Ariel-img {
+  border: 1px solid blue;
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 100%;
+  height: 50%;
+  background-image: url("../css/images/Ariel.jpg");
+  background-size: 100%;
+}
+
+.Cass-img {
+  border: 1px solid blue;
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 100%;
+  height: 100%;
+  background-image: url("../css/images/Cass.jpg");
+  background-size: 100%;
+}
+
+.Hannah-img {
+  border: 1px solid blue;
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 100%;
+  height: 50%;
+  background-image: url("../css/images/Hannah.jpg");
+  background-size: 100%;
+}
+
+.Cass {
+  border: 1px solid blue;
+  border-radius: 5%;
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 29%;
+  height: 70%;
+  margin-top: 2%;
+  padding: 2%;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+  overflow: scroll;
+  float: left;
+}
+
+.Hannah {
+  border: 1px solid blue;
+  border-radius: 5%;
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 29%;
+  height: 70%;
+  margin-top: 2%;
+  padding: 2%;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+  overflow: scroll;
+  float: left;
+}
+
+.Ariel::-webkit-scrollbar {
+  display: none;
+}
+
+.Cass::-webkit-scrollbar {
+  display: none;
+}
+
+.Hannah::-webkit-scrollbar {
+  display: none;
+}
 /*# sourceMappingURL=style.css.map */
