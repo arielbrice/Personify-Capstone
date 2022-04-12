@@ -127,4 +127,8 @@ body {
 .Hannah::-webkit-scrollbar {
   display: none;
 }
+
+.name {
+  color: black;
+}
 /*# sourceMappingURL=style.css.map */
