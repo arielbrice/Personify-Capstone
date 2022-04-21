@@ -20,8 +20,8 @@ body {
   background-color: pink;
   font-weight: bold;
   font-size: 1.75em;
-  height: 7%;
-  width: 100%;
+  height: fit-content2%;
+  width: fit-content2%;
 }
 
 .contact-btn {
@@ -29,8 +29,8 @@ body {
   background-color: pink;
   font-weight: bold;
   font-size: 1.75em;
-  height: 7%;
-  width: 100%;
+  height: fit-content2%;
+  width: fit-content2%;
 }
 
 .about-btn {
@@ -38,8 +38,8 @@ body {
   background-color: pink;
   font-weight: bold;
   font-size: 1.75em;
-  height: 7%;
-  width: 100%;
+  height: fit-content2%;
+  width: fit-content2%;
 }
 
 .login-btn {
@@ -47,33 +47,29 @@ body {
   background-color: pink;
   font-weight: bold;
   font-size: 1.75em;
-  height: 7%;
-  width: 100%;
+  height: fit-content2%;
+  width: fit-content2%;
 }
 
-.name {
-  color: whitesmoke;
+.name-btn {
+  color: #281b46;
+  background-color: pink;
   font-weight: bold;
   font-size: 1.75em;
-  height: 7%;
-  width: 100%;
-  text-align: right;
+  height: fit-content2%;
+  width: fit-content2%;
 }
 
 .scrollmenu {
   overflow: hidden;
   background-color: #5b4787;
   font-family: Arial;
-  color: pink;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  -webkit-box-align: right;
-      -ms-flex-align: right;
-          align-items: right;
   -webkit-box-pack: right;
       -ms-flex-pack: right;
           justify-content: right;
@@ -199,5 +195,77 @@ body {
 
 .Hannah::-webkit-scrollbar {
   display: none;
+}
+
+.playlist-box {
+  border: 1px solid blue;
+  border-radius: 5%;
+  background-color: rgba(230, 230, 250, 0.637);
+  -webkit-box-shadow: 2px 2px black;
+          box-shadow: 2px 2px black;
+  width: 50%;
+  height: 70%;
+  margin: 2.5%;
+  padding: 2%;
+  margin-top: 2%;
+  margin-bottom: 10%;
+  -webkit-text-size-adjust: 100%;
+     -moz-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+  overflow: scroll;
+}
+
+.playlist-box::-webkit-scrollbar {
+  display: none;
+}
+
+.new-playlist-btn {
+  color: #281b46;
+  background-color: pink;
+  font-weight: bold;
+  font-size: 1.75em;
+  height: fit-content2%;
+  width: fit-content2%;
+  margin: 2%;
+}
+
+.export-playlist-btn {
+  color: #281b46;
+  background-color: pink;
+  font-weight: bold;
+  font-size: 1.75em;
+  height: fit-content2%;
+  width: fit-content2%;
+}
+
+.playlist-container {
+  height: 100%;
+  background-color: transparent;
+  font-family: Arial;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 1%;
+}
+
+.table, th, td {
+  margin: 2%;
+  border-collapse: collapse;
+  font-size: 2em;
+}
+
+.th {
+  font-size: 4em;
+}
+
+.td {
+  font-size: 2em;
 }
 /*# sourceMappingURL=style.css.map */

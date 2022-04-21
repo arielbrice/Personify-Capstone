@@ -23,8 +23,8 @@ body{
     background-color: pink;
     font-weight: bold;
     font-size: 1.75em;
-    height: 7%;
-    width: 100%;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
 
 }
 .contact-btn{
@@ -32,8 +32,8 @@ body{
     background-color: pink;
     font-weight: bold;
     font-size: 1.75em;
-    height: 7%;
-    width: 100%;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
 }
 
 .about-btn{
@@ -41,8 +41,8 @@ body{
     background-color: pink;
     font-weight: bold;
     font-size:1.75em;
-    height: 7%;
-    width: 100%;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
 }
 
 .login-btn{
@@ -50,26 +50,26 @@ body{
     background-color: pink;
     font-weight: bold;
     font-size: 1.75em;
-    height: 7%;
-    width: 100%;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
 }
-.name{
-    color: whitesmoke;
+
+.name-btn{
+    color: $darkPurple2;
+    background-color: pink;
     font-weight: bold;
     font-size: 1.75em;
-    height: 7%;
-    width: 100%;
-    text-align: right;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
 }
 
 .scrollmenu{
  overflow: hidden;
   background-color: $darkPurple;
   font-family: Arial;
-  color: pink;
   display: flex;
   align-items: center;
-  align-items: right;
+  //align-items: right;
   justify-content: right;
   margin-bottom: 1%;
 

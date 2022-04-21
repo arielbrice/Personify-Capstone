@@ -171,7 +171,7 @@ def makePlaylist():
         titles.append(item['track']['name'])
     user.playlist = titles
     return ' '.join(titles)'''
-    return id
+    return render_template("playlist.html", name = u['display_name'])
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)
