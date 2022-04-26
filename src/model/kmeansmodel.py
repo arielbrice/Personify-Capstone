@@ -1,42 +1,27 @@
 import spotipy
 import spotipy.util as util
+from spotipy import SpotifyClientCredentials, SpotifyOAuth
+
 from pymongo import MongoClient
-import pandas as pd
 import mongoengine
+
+import pandas as pd
 
 from matplotlib import pyplot as plt
 import mpl_toolkits
 from mpl_toolkits.mplot3d import Axes3D
-import sklearn
+
+#import sklearn
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import pairwise_distances_argmin_min
-from spotipy import SpotifyClientCredentials, SpotifyOAuth
-
-#from database import mongo_setup
-
-scaler = MinMaxScaler()
 
 import numpy as np
 
+scaler = MinMaxScaler()
 
-
-
-'''
-import pymongo
-import pandas as pd
-from pymongo import Connection
-connection = Connection()
-db = connection.database_name
-input_data = db.collection_name
-data = pd.DataFrame(list(input_data.find()))
-'''
-
-
+# Establish DB Connection
 with open("dbconnection.txt") as file:
     connectionString = file.readline().strip()
-
 
 client = MongoClient(connectionString)
 db = client['Personify']
@@ -76,11 +61,6 @@ def trainAndPredict():
     data.to_csv('updated-songs-w-clusters.csv')
     return data
 
-# euclidean distance for recommendations
-
-# get reccomendations
-
-#TODO: use to get the reccomended songs
 def modeRecs(username):
     data = trainAndPredict()
     songs = collectUserSongs(username)
@@ -94,23 +74,16 @@ def modeRecs(username):
 
     artistsInCommon = list(isolated_cluster[isolated_cluster['artist'].isin(newlyAddedArtists) & ~(isolated_cluster['song_id'].isin(newlyAddedIDs))]['title'])
 
-
     if len(artistsInCommon) != 0:
         recs = isolated_cluster.sample(n=10)
         print (recs)
         print(recs['title'], recs['artist'])
-        print ("ariel recs", recs['title'], recs['artist'])
         return recs
-    
-
 
 def euclidianRecs(username):
     data = trainAndPredict()
     songs = collectUserSongs(username)
     modeRecs(username)
-
-
-
 
 def collectUserSongs(username):
     with open("secret.txt", encoding="UTF-8") as file:
@@ -119,77 +92,11 @@ def collectUserSongs(username):
     scope = 'user-library-read'
     #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username="cassjhunt"))
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username=username))
-
+    print(username)
     songs = []
     results = sp.current_user_saved_tracks()
     for item in results['items']:
         songs.append(item['track']['id'])
     return songs
 
-
-
-euclidianRecs("arielbric4")
-
-'''
-print(scaled[y == 1,0], scaled[y == 1,1])
-# visualizing clusters
-fig, ax = plt.subplots(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-
-
-#plt.scatter(scaled[y == 0,0],scaled[y == 0,1], s= 10, c= 'red', alpha=0.20, label= 'Cluster 0')
-#plt.scatter(scaled[y == 1,0], scaled[y == 1,1], s= 10, c= 'blue',  alpha=0.20, label= 'Cluster 1')
-#plt.scatter(scaled[y == 2,0], scaled[y == 2,1], s= 10, c= 'green',  alpha=0.20, label= 'Cluster 2')
-#plt.scatter(scaled[y == 3,0], scaled[y == 3,1], s= 10, c= 'cyan',  alpha=0.20, label= 'Cluster 3')
-#plt.scatter(scaled[y == 4,0], scaled[y == 4,1], s= 10, c= 'yellow',  alpha=0.20, label= 'Cluster 4')
-#plt.scatter(scaled[y == 5,0], scaled[y == 5,1], s= 10, c= 'orange',  alpha=0.20, label= 'Cluster 5')
-#plt.scatter(scaled[y == 6,0], scaled[y == 6,1], s= 10, c= 'purple',  alpha=0.20, label= 'Cluster 6')
-plt.scatter(scaled[y == 7,0], scaled[y == 7,1], s= 10, c= 'aquamarine',  alpha=0.20, label= 'Cluster 7')
-
-# centroids
-#plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:,1], s= 25, c= 'yellow',  alpha=0.5, label= 'Centroids')
-
-plt.title('Cluster 7')
-#plt.legend()
-plt.savefig('clusters.png')
-plt.show()
-
-
-print("dance\n", data.groupby(['k_cluster']).danceability.mean().sort_values(ascending=False))
-print("energy\n", data.groupby(['k_cluster']).energy.mean().sort_values(ascending=False))
-print("instrulmentalness\n", data.groupby(['k_cluster']).instrumentalness.mean().sort_values(ascending=False))
-print("key\n", data.groupby(['k_cluster']).key.mean().sort_values(ascending=False))
-print("liveness\n", data.groupby(['k_cluster']).liveness.mean().sort_values(ascending=False))
-print("loud\n",data.groupby(['k_cluster']).loudness.mean().sort_values(ascending=False))
-print("mode\n",data.groupby(['k_cluster']).mode.mean().sort_values(ascending=False))
-print("speech\n",data.groupby(['k_cluster']).speechiness.mean().sort_values(ascending=False))
-
-
-
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=clientid, client_secret=clientsecret))
-
-with open("../../secret.txt", encoding="UTF-8") as file:
-    clientid = file.readline().strip()
-    clientsecret = file.readline().strip()
-scope = 'user-library-read'
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username="hannahsiitia"))
-
-songs = []
-results = sp.current_user_saved_tracks()
-
-stat_map = {}
-stat_keys = ['title', 'artist', 'id', 'acousticness', 'danceability', 'energy', 'instrumentalness', 'key', 'liveness',
-             'loudness', 'mode', 'speechiness']
-stat_map['title'] = []
-stat_map['artist'] = []
-for keys in stat_keys:
-    stat_map[keys] = 0
-
-for item in results['items']:
-    title = item['track']['name']
-    artist = item['track']['artists'][0]['name']
-    songs.append(item['track']['id'])
-    testing_billboard.newSongs(title, artist)
-'''
-
-
+print(modeRecs("cassjhunt"))

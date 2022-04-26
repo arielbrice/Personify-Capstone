@@ -6,45 +6,45 @@ from spotipy.oauth2 import SpotifyOAuth
 #'medium_term' = (6 Months)
 #'long_term' = (1 Year)
 
+'''
+Return user's top tracks from their authorized Spotify account through spotipy
+'''
 def topTracks(sp):
     tracks = sp.current_user_top_tracks(limit=50,  time_range= 'short_term')
     track = []
     for item in tracks['items']:
         track += (item['id']) + " \n"
     topT = listToString(track)
-    #with open("HannahTopTrackIDs.txt", "w", encoding="UTF-8") as file:
-        #file.write(topT)
     return topT
-    #print(tracks)
 
+'''
+Return user's top artists from their authorized Spotify account through spotipy
+'''
 def topArtists(sp):
     artists = sp.current_user_top_artists(limit=50,  time_range= 'short_term')
     artist = []
     for item in artists['items']:
-        #print (item['name'], item['genres'])
         artist +=  item['name'] + " "   
     topA = listToString(artist)
     print("top: ", topA)
     return topA
 
+'''
+Prints a user's top artists from their authorized Spotify account through spotipy
+'''
 def printtopA(artists):
     artist = []
     for item in artists['items']:
-        #print (item['name'], item['genres'])
         artist +=  (item['name']) + " "
     listToStr = listToString(artist)
     print("top: ", listToStr)
     return listToStr
 
-
+'''
+Converts Python list to String
+'''
 def listToString(s): 
-    
-    # initialize an empty string
     str1 = "" 
-    
-    # traverse in the string  
     for ele in s: 
         str1 += ele  
-    
-    # return string  
     return str1 

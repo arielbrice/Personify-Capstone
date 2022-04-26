@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans
 from sklearn import metrics
 import pandas as pd
 
+#Establish database connection
 with open("dbconnection.txt") as file:
     connectionstring = file.readline().strip()
 client = pymongo.MongoClient(connectionstring)
@@ -15,15 +16,7 @@ db = []
 x = mycol.find()
 for data in x:
     db.append(data['analysis'][3:])
-
-#print(db)
-
-
-#'title', 'artist', 'id','acousticness', 'danceability','energy','instrumentalness','key','liveness','loudness','mode','speechiness'
-
-#do a kmeans clustering on the data in db
-
-
+    
 df = pd.DataFrame(db, columns=['acousticness', 'danceability','energy','instrumentalness','key','liveness','loudness','mode','speechiness'])
 
 print(df)

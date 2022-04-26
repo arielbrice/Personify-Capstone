@@ -1,5 +1,4 @@
 import urllib.parse
-
 import mongoengine
 import spotipy
 import pymongo

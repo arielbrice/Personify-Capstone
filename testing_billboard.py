@@ -76,19 +76,3 @@ for year in range(2020,2021):
                     continue
                 track = result['tracks']['items']
                 stats = get_spotify_stats(row['title'], row['artist'], track)
-        chart_df.to_csv('hot-100-{0}-{1}-15.csv'.format(str(year), i), sep=',', encoding='utf-8')
-
-
-
-
-"""
-Take the artists and songs from each df
-for each artist and song, do a search on spotify if it has not already been searched
-result = sp.search(q = keyword, limit=1)
-once we have the song id,
-we're going to use that to query the audio features from Spotify
-for each spotify ID:
-create a database entry
-save the following information:
-Title, Artist, Spotify Song ID, Acousticness, Dancebility, Energy, Instrumentalness, Key, Liveness, Loudness, Mode, Speechiness, Tempo, Time_Signature, Valence
-"""
