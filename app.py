@@ -1,22 +1,26 @@
 from flask import Flask, request, url_for, session, redirect, render_template
+from model.kmeansmodel import *
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
-app = Flask(__name__)
+
 from src.user.userTaste import topArtists, topTracks
 import database.mongo_setup as mongo_setup
 from database.user import User
 from pymongo import MongoClient
 import mongoengine
+from tabulate import tabulate
 
 
+
+
+app = Flask(__name__)
 app.secret_key = "0Ncs92894fhno"
 app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 TOKEN_INFO = "token_info"
 
 with open("dbconnection.txt") as file:
     connectionString = file.readline().strip()
-
 
 
 
@@ -50,13 +54,15 @@ def getToken():
 def create_spotify_oauth():
     clientid, clientsecret = readFile()
     return SpotifyOAuth(client_id = clientid, client_secret=clientsecret,
-        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private') #scope = "user-library-read")
+        redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private, user-library-read')
 
 def readFile():
     with open("secret.txt") as file:
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
         return clientid, clientsecret
+
+
 
 
 @app.route('/')
@@ -151,6 +157,7 @@ def getSongs():
     return "These are some songs we reccomend for a leo: " + str(songlist)
 '''
 
+#TODO: write creating a playlist function
 @app.route('/playlist')
 def makePlaylist():
     try:
@@ -163,6 +170,9 @@ def makePlaylist():
     u = sp.me()
     id = u['id']
 
+
+
+
     # TODO: get user's top artists and top tracks and train it on our model and then display the new playlist to the screen to allow user to save it
     '''playlist = showSongNames(sp)
     maps = sp.playlist_tracks(playlist)
@@ -171,7 +181,18 @@ def makePlaylist():
         titles.append(item['track']['name'])
     user.playlist = titles
     return ' '.join(titles)'''
-    return render_template("playlist.html", name = u['display_name'])
+
+    recs = modeRecs("arielbric4")
+    table = [['one','two','three'],['four','five','six'],['seven','eight','nine']]
+    value = tabulate(table, tablefmt='html')
+
+    print(tabulate(table))
+    return render_template("playlist.html", name = u['display_name'], playlist = table)
+
+
+#TODO: export a playlist that is created from our algorithm
+def exportPlaylist():
+    return
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)

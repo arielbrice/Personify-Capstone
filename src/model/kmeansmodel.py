@@ -63,6 +63,7 @@ def prepareData():
     scaled = scaler.fit_transform(x)
     return data, scaled
 
+#TODO: save into a model
 def trainAndPredict():
     data, scaled = prepareData()
     kmeans = KMeans(n_clusters = 8, init = 'k-means++', max_iter = 1000, n_init = 50, random_state = 0)
@@ -77,9 +78,13 @@ def trainAndPredict():
     return data
 
 # euclidean distance for recommendations
-def modeRecs():
+
+# get reccomendations
+
+#TODO: use to get the reccomended songs
+def modeRecs(username):
     data = trainAndPredict()
-    songs = collectUserSongs()
+    songs = collectUserSongs(username)
     newlyAddedIDs = list(data[data['song_id'].isin(songs)]['song_id'])
     newlyAddedArtists = list(data[data['song_id'].isin(songs)]['artist'])
 
@@ -93,6 +98,9 @@ def modeRecs():
     if len(artistsInCommon) == 0:
         recs = isolated_cluster.sample(n=10)
         print(recs['title'], recs['artist'])
+        return recs
+    
+
 
 def euclidianRecs():
     data = trainAndPredict()
@@ -101,12 +109,13 @@ def euclidianRecs():
 
 
 
-def collectUserSongs():
+def collectUserSongs(username):
     with open("../../secret.txt", encoding="UTF-8") as file:
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
     scope = 'user-library-read'
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username="cassjhunt"))
+    #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username="cassjhunt"))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username=username))
 
     songs = []
     results = sp.current_user_saved_tracks()
