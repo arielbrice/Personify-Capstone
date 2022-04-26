@@ -1,17 +1,78 @@
-
-body{
-    background-color: $lightLavender;
+// for the personify title
+.header{
+    border-radius: 0%;
+    margin: 0%;
+    background-color: $darkPurple;
 }
-.homeitem{
-    color: purple;
+.titleP{
+    color: white;
+    font-weight: bold;
+    margin-left: 5%;
+    font-size: 4em;
+
+}
+
+
+
+//background image
+body{
+    background-image: url("../css/images/background.png");
+}
+.home-btn{
+    color: $darkPurple2;
+    background-color: pink;
+    font-weight: bold;
+    font-size: 1.75em;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
+
+}
+.contact-btn{
+    color: $darkPurple2;
+    background-color: pink;
+    font-weight: bold;
+    font-size: 1.75em;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
+}
+
+.about-btn{
+    color: $darkPurple2;
+    background-color: pink;
+    font-weight: bold;
+    font-size:1.75em;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
+}
+
+.login-btn{
+    color: $darkPurple2;
+    background-color: pink;
+    font-weight: bold;
+    font-size: 1.75em;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
+}
+
+.name-btn{
+    color: $darkPurple2;
+    background-color: pink;
+    font-weight: bold;
+    font-size: 1.75em;
+    height: fit-content + 2%;
+    width: fit-content + 2%;
 }
 
 .scrollmenu{
  overflow: hidden;
-  background-color: pink;
+  background-color: $darkPurple;
   font-family: Arial;
-  color: pink;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  //align-items: right;
+  justify-content: right;
+  margin-bottom: 1%;
+
 }
 .box{
     border: 1px solid blue;
@@ -30,3 +91,10 @@ body{
     display: none;
   }
     
+  //for the personify subtitle
+.sub{
+    color:whitesmoke;
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-left: 5%;
+}
