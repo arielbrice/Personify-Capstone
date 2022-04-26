@@ -183,6 +183,7 @@ def makePlaylist():
     return ' '.join(titles)'''
 
     recs = modeRecs("arielbric4")
+    print(recs)
     table = [['one','two','three'],['four','five','six'],['seven','eight','nine']]
     value = tabulate(table, tablefmt='html')
 

@@ -55,7 +55,7 @@ def prepareData():
         x[item] = np.asarray(x[item])
 
     x = pd.DataFrame(data['analysis'].to_list(), columns=['acousticness', 'danceability','energy','instrumentalness','key','liveness','loudness','mode','speechiness'])
-    print(x.head)
+    #print(x.head)
     x.drop(['mode'], axis=1)
     x.drop(['key'], axis=1)
     data = pd.concat([data, x], axis=1)
@@ -94,16 +94,20 @@ def modeRecs(username):
 
     artistsInCommon = list(isolated_cluster[isolated_cluster['artist'].isin(newlyAddedArtists) & ~(isolated_cluster['song_id'].isin(newlyAddedIDs))]['title'])
 
-    if len(artistsInCommon) == 0:
+
+    if len(artistsInCommon) != 0:
         recs = isolated_cluster.sample(n=10)
+        print (recs)
         print(recs['title'], recs['artist'])
+        print ("ariel recs", recs['title'], recs['artist'])
         return recs
     
 
 
-#def euclidianRecs(username):
-   # data = trainAndPredict()
-    #songs = collectUserSongs(username)
+def euclidianRecs(username):
+    data = trainAndPredict()
+    songs = collectUserSongs(username)
+    modeRecs(username)
 
 
 
@@ -124,7 +128,7 @@ def collectUserSongs(username):
 
 
 
-#euclidianRecs()
+euclidianRecs("arielbric4")
 
 '''
 print(scaled[y == 1,0], scaled[y == 1,1])
