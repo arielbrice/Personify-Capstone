@@ -34,8 +34,9 @@ data = pd.DataFrame(list(input_data.find()))
 '''
 
 
-with open("../../dbconnection.txt") as file:
+with open("dbconnection.txt") as file:
     connectionString = file.readline().strip()
+
 
 client = MongoClient(connectionString)
 db = client['Personify']
@@ -100,15 +101,15 @@ def modeRecs(username):
     
 
 
-def euclidianRecs():
-    data = trainAndPredict()
-    songs = collectUserSongs()
+#def euclidianRecs(username):
+   # data = trainAndPredict()
+    #songs = collectUserSongs(username)
 
 
 
 
 def collectUserSongs(username):
-    with open("../../secret.txt", encoding="UTF-8") as file:
+    with open("secret.txt", encoding="UTF-8") as file:
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
     scope = 'user-library-read'
@@ -123,7 +124,7 @@ def collectUserSongs(username):
 
 
 
-euclidianRecs()
+#euclidianRecs()
 
 '''
 print(scaled[y == 1,0], scaled[y == 1,1])
