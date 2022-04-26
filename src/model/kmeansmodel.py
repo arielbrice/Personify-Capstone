@@ -14,13 +14,11 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import pairwise_distances_argmin_min
 from spotipy import SpotifyClientCredentials, SpotifyOAuth
 
-from database import mongo_setup
+#from database import mongo_setup
 
 scaler = MinMaxScaler()
 
 import numpy as np
-import billboard
-import testing_billboard
 
 
 

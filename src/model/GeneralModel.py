@@ -28,7 +28,7 @@ def storeIDs():
 use spotipy to retrieve audio features for all songs
 writes info to csv file
 '''
-def getAudioAnalysis():
+'''def getAudioAnalysis():
     sp = authorizeFromSecret()
     IDs = storeIDs()
     allfeatures = sp.audio_features(IDs)
@@ -79,7 +79,7 @@ def compareFeatures():
     keep = set()
     discard = set()
 
-    '''
+    
     danceability = 0.1069414125
     energy = 0.2082973042
     key = 3.0530012
@@ -93,7 +93,7 @@ def compareFeatures():
     tempo = 34.11046634
     duration = 37852.24111
     timeSignature = 0.5955618167
-    '''
+    
 
     stdevs = [0.1069414125,0.2082973042,3.0530012,3.103078809,0.4903143515,0.0319907012,0.3250085831,0.08267264162,0.1770045646,0.1834915416,34.11046634,'na',37852.24111,0.5955618167]
 
@@ -134,7 +134,7 @@ def showSongNames(sp):
 
     return playlist_id
 
-
+'''
 
 
 def is_number(s):
@@ -144,4 +144,4 @@ def is_number(s):
     except ValueError:
         return False
 
-getAudioAnalysis()
+#getAudioAnalysis()

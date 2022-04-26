@@ -1,5 +1,5 @@
 from flask import Flask, request, url_for, session, redirect, render_template
-from model.kmeansmodel import *
+from src.model.kmeansmodel import *
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
