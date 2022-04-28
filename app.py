@@ -1,3 +1,4 @@
+from matplotlib.pyplot import title
 from flask import Flask, request, url_for, session, redirect, render_template
 from src.model.kmeansmodel import *
 import spotipy
@@ -169,6 +170,7 @@ def makePlaylist():
 
     u = sp.me()
     id = u['id']
+    print(id)
 
 
 
@@ -182,13 +184,16 @@ def makePlaylist():
     user.playlist = titles
     return ' '.join(titles)'''
 
-    recs = modeRecs("arielbric4")
-    print(recs)
+    recs = modeRecs(id)
+    print("\n in app.py")
+    for itemt, itema in zip(recs['title'] , recs['artist']):
+        print(itemt, itema)
     table = [['one','two','three'],['four','five','six'],['seven','eight','nine']]
     value = tabulate(table, tablefmt='html')
 
     print(tabulate(table))
-    return render_template("playlist.html", name = u['display_name'], playlist = table)
+        
+    return render_template("playlist.html", name = u['display_name'], playlist = zip(recs['title'], recs['artist']), title = recs['title'], artist = recs['artist'])
 
 
 #TODO: export a playlist that is created from our algorithm

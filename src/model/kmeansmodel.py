@@ -96,10 +96,9 @@ def modeRecs(username):
 
 
     if len(artistsInCommon) != 0:
-        recs = isolated_cluster.sample(n=10)
+        recs = isolated_cluster.sample(n=50)
         print (recs)
         print(recs['title'], recs['artist'])
-        print ("ariel recs", recs['title'], recs['artist'])
         return recs
     
 
@@ -128,7 +127,7 @@ def collectUserSongs(username):
 
 
 
-euclidianRecs("arielbric4")
+#euclidianRecs("arielbric4")
 
 '''
 print(scaled[y == 1,0], scaled[y == 1,1])
