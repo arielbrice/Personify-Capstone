@@ -133,7 +133,6 @@ def user():
         return redirect(url_for('login', _external=False))
     sp = spotipy.Spotify(auth=token_info['access_token'])
     name = sp.me()['display_name']
-    topTracks(sp)
     return render_template("user.html", name = name)
 
 '''
@@ -170,35 +169,25 @@ def makePlaylist():
 
     u = sp.me()
     id = u['id']
-    print(id)
-
-
-
-
-    # TODO: get user's top artists and top tracks and train it on our model and then display the new playlist to the screen to allow user to save it
-    '''playlist = showSongNames(sp)
-    maps = sp.playlist_tracks(playlist)
-    titles = []
-    for item in maps['items']:
-        titles.append(item['track']['name'])
-    user.playlist = titles
-    return ' '.join(titles)'''
+    #print(id)
 
     recs = modeRecs(id)
     print("\n in app.py")
-    for itemt, itema in zip(recs['title'] , recs['artist']):
-        print(itemt, itema)
-    table = [['one','two','three'],['four','five','six'],['seven','eight','nine']]
-    value = tabulate(table, tablefmt='html')
+    #for itemt, itema in zip(recs['title'] , recs['artist']):
+    #    print(itemt, itema)
+    #table = [['one','two','three'],['four','five','six'],['seven','eight','nine']]
+    #value = tabulate(table, tablefmt='html')
 
-    print(tabulate(table))
+    #print(tabulate(table))
         
     return render_template("playlist.html", name = u['display_name'], playlist = zip(recs['title'], recs['artist']), title = recs['title'], artist = recs['artist'])
 
 
 #TODO: export a playlist that is created from our algorithm
+@app.route('/export')
 def exportPlaylist():
-    return
+
+    return user()
 
 def getToken():
     token_info = session.get(TOKEN_INFO, None)
