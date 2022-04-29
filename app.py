@@ -18,6 +18,10 @@ HOMEDIR = "~/.personify"
 PATHSEC = HOMEDIR+"/secret.txt"    
 PATHDB = HOMEDIR + "/dbconnection.txt" 
 # need to download the two files and save it under HOMEDIR
+
+
+app = Flask(__name__)
+app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 app.secret_key = "0Ncs92894fhno"
 ################################
 
@@ -32,8 +36,6 @@ if not os.path.exists(PATHSEC) or not os.path.exists(PATHDB):
    sys.exit(0)
 
 
-app = Flask(__name__)
-app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 TOKEN_INFO = "token_info"
 
 with open(PATHDB) as file:
