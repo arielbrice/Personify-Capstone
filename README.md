@@ -7,7 +7,9 @@ Personify is a web based music recomendation app that takes your spotify informa
 ```
 conda create -n yourenv pip
 pip install -r requirements.txt
+```
 Make sure secret tokens are present
+```
 python -m flask run
 ```
 ### How to use
