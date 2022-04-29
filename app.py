@@ -23,7 +23,7 @@ app.secret_key = "0Ncs92894fhno"
 
 import os
 import sys
-if not os.path.isdir(HOMEDIR)
+if not os.path.isdir(HOMEDIR):
    os.system("mkdir " + HOMEDIR)
 
 
