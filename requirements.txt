@@ -1,0 +1,11 @@
+billboard.py==7.0.0
+Flask==2.1.1
+matplotlib==3.5.1
+mongoengine==0.24.1
+numpy==1.22.3
+pandas==1.4.2
+pymongo==4.1.1
+scikit_learn==1.0.2
+spotipy==2.19.0
+tabulate==0.8.9
+pymongo[srv]
