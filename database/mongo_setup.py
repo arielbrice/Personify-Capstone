@@ -10,8 +10,15 @@ import datetime
 import pprint
 from database.track import Track
 
+homeDIR = os.path.expanduser('~')
+
+DIRDB = homeDIR + "/.personify/dbconnection.txt"
+
+PATHSEC = homeDIR + "/.personify/secret.txt"
+
+
 stat_keys = ['title', 'artist', 'id','acousticness', 'danceability','energy','instrumentalness','key','liveness','loudness','mode','speechiness']
-with open("dbconnection.txt") as file:
+with open(DIRDB) as file:
     connectionstring = file.readline().strip()
 client = MongoClient(connectionstring)
 db = client['personify']
@@ -19,7 +26,7 @@ userCollection = db['users']
 
 # couldn't tell you what this is for
 def global_init():
-    with open("dbconnection.txt") as file:
+    with open(DIRDB) as file:
         connectionString = file.readline().strip()
 
     client = MongoClient(connectionString)

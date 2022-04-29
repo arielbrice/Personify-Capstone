@@ -19,10 +19,13 @@ from spotipy import SpotifyClientCredentials, SpotifyOAuth
 scaler = MinMaxScaler()
 
 import numpy as np
+import os
 
-DIRDB = "~/.personify/dbconnection.txt"
+homeDIR = os.path.expanduser('~')
 
-PATHSEC = "~/.personify/secret.txt"  
+DIRDB = homeDIR + "/.personify/dbconnection.txt"
+
+PATHSEC = homeDIR + "/.personify/secret.txt"  
 
 '''
 import pymongo
