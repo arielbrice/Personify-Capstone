@@ -13,27 +13,29 @@ import mongoengine
 from tabulate import tabulate
 
 ### update this one if needed###
-HOMEDIR = "~/.personify"
+HOMEDIR = os.path.expanduser('~') + "/.personify"
 
 PATHSEC = HOMEDIR+"/secret.txt"    
 PATHDB = HOMEDIR + "/dbconnection.txt" 
 # need to download the two files and save it under HOMEDIR
+
+
+app = Flask(__name__)
+app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 app.secret_key = "0Ncs92894fhno"
 ################################
 
 import os
 import sys
-if not os.path.isdir(HOMEDIR)
+if not os.path.isdir(HOMEDIR):
    os.system("mkdir " + HOMEDIR)
 
 
-if not os.path.exists(PATHSEC) or not os.path.exists(PATHDB):
+if (not os.path.exists(PATHSEC)) or (not os.path.exists(PATHDB)):
    print("Please download the two files secret.txt and dbconnection.txt and put it into the "+HOMEDIR)
    sys.exit(0)
 
 
-app = Flask(__name__)
-app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 TOKEN_INFO = "token_info"
 
 with open(PATHDB) as file:
