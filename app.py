@@ -13,7 +13,7 @@ import mongoengine
 from tabulate import tabulate
 
 ### update this one if needed###
-HOMEDIR = "~/.personify"
+HOMEDIR = os.path.expanduser('~')
 
 PATHSEC = HOMEDIR+"/secret.txt"    
 PATHDB = HOMEDIR + "/dbconnection.txt" 
@@ -31,7 +31,7 @@ if not os.path.isdir(HOMEDIR):
    os.system("mkdir " + HOMEDIR)
 
 
-if not os.path.exists(PATHSEC) or not os.path.exists(PATHDB):
+if (not os.path.exists(PATHSEC)) or (not os.path.exists(PATHDB)):
    print("Please download the two files secret.txt and dbconnection.txt and put it into the "+HOMEDIR)
    sys.exit(0)
 
