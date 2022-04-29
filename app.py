@@ -12,15 +12,31 @@ from pymongo import MongoClient
 import mongoengine
 from tabulate import tabulate
 
+### update this one if needed###
+HOMEDIR = "~/.personify"
 
+PATHSEC = HOMEDIR+"/secret.txt"    
+PATHDB = HOMEDIR + "/dbconnection.txt" 
+# need to download the two files and save it under HOMEDIR
+app.secret_key = "0Ncs92894fhno"
+################################
+
+import os
+import sys
+if not os.path.isdir(HOMEDIR)
+   os.system("mkdir " + HOMEDIR)
+
+
+if not os.path.exists(PATHSEC) or not os.path.exists(PATHDB):
+   print("Please download the two files secret.txt and dbconnection.txt and put it into the "+HOMEDIR)
+   sys.exit(0)
 
 
 app = Flask(__name__)
-app.secret_key = "0Ncs92894fhno"
 app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 TOKEN_INFO = "token_info"
 
-with open("dbconnection.txt") as file:
+with open(PATHDB) as file:
     connectionString = file.readline().strip()
 
 
@@ -58,7 +74,7 @@ def create_spotify_oauth():
         redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private, user-library-read')
 
 def readFile():
-    with open("secret.txt") as file:
+    with open(PATHSEC) as file:
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
         return clientid, clientsecret
