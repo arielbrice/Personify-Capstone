@@ -13,7 +13,7 @@ import mongoengine
 from tabulate import tabulate
 
 ### update this one if needed###
-HOMEDIR = os.path.expanduser('~') + ".personify"
+HOMEDIR = os.path.expanduser('~') + "/.personify"
 
 PATHSEC = HOMEDIR+"/secret.txt"    
 PATHDB = HOMEDIR + "/dbconnection.txt" 
