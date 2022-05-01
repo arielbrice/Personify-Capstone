@@ -13,7 +13,7 @@ import mongoengine
 from tabulate import tabulate
 
 ### update this one if needed###
-HOMEDIR = os.path.expanduser('~') + ".personify"
+HOMEDIR = os.path.expanduser('~') + "/.personify"
 
 PATHSEC = HOMEDIR+"/secret.txt"    
 PATHDB = HOMEDIR + "/dbconnection.txt" 
@@ -31,14 +31,14 @@ if not os.path.isdir(HOMEDIR):
    os.system("mkdir " + HOMEDIR)
 
 
-if (not os.path.exists(PATHSEC)) or (not os.path.exists(PATHDB)):
-   print("Please download the two files secret.txt and dbconnection.txt and put it into the "+HOMEDIR)
-   sys.exit(0)
+#if (not os.path.exists(PATHSEC)) or (not os.path.exists(PATHDB)):
+#    print("Please download the two files secret.txt and dbconnection.txt and put it into the "+HOMEDIR)
+#    sys.exit(0)
 
 
 TOKEN_INFO = "token_info"
 
-with open(PATHDB) as file:
+with open("dbconnection.txt") as file:
     connectionString = file.readline().strip()
 
 
@@ -76,7 +76,7 @@ def create_spotify_oauth():
         redirect_uri=url_for('redirectPage', _external = True), scope = 'user-top-read, playlist-modify-private, playlist-read-private, user-library-read')
 
 def readFile():
-    with open(PATHSEC) as file:
+    with open("secret.txt") as file:
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
         return clientid, clientsecret
