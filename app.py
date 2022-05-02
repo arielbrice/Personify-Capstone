@@ -46,8 +46,11 @@ def getmongoClient():
     client = MongoClient(connectionString)
     db = client['Personify']
     userCollection = db['Users']
+    mongoengine.disconnect('pers-db')
     mongo_setup.global_init()
-    mongoengine.connect(alias='pers-db', host=connectionString)
+    
+    mongoengine.connect(alias='pers', host=connectionString)
+    
     return userCollection
 
 
@@ -197,8 +200,13 @@ def makePlaylist():
 
     #print(tabulate(table))
 
-
+    songrecs.clear()
     songrecs.extend(recs["song_id"])
+
+    clusterCount = 0
+    #cluster = recs["k_cluster"].count(5)
+    #print("\n", cluster)
+
         
     return render_template("playlist.html", name = u['display_name'], playlist = zip(recs['title'], recs['artist']), title = recs['title'], artist = recs['artist'])
 
@@ -212,13 +220,17 @@ def exportPlaylist():
         print("user not logged in")
         return redirect(url_for('login', _external=False))
     sp = spotipy.Spotify(auth=token_info['access_token'])
-    playlist = sp.user_playlist_create(sp.me()['id'], "Test Personify Recs", public = False, description= "This playlist was made using your Zodiac sign and machine learning!")
+    playlist = sp.user_playlist_create(sp.me()['id'], "Personify Recomendations", public = False, description= "This playlist was made using KMeans Machiene Learning!")
     playlist_id = playlist["id"]
-    if(songrecs == None):
+    if(songrecs == []):
         return makePlaylist()
-    print(songrecs)
-    sp.playlist_add_items(playlist_id, songrecs[:25], position=None)
-    sp.playlist_add_items(playlist_id, songrecs[25:], position=None)
+    #print(songrecs)
+    try:
+        sp.playlist_add_items(playlist_id, songrecs[:25], position=None)
+        sp.playlist_add_items(playlist_id, songrecs[25:], position=None)
+    except:
+        print("error")
+        return makePlaylist()
     return user()
 
 def getToken():
