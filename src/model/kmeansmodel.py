@@ -85,27 +85,31 @@ def trainAndPredict():
 # get reccomendations
 
 #TODO: use to get the reccomended songs
-def modeRecs(username):
+def modeRecs(username, sp):
+    print("in modeRecs with", username)
     data = trainAndPredict()
-    songs = collectUserSongs(username)
+    print(data)
+    songs = collectUserSongs(username, sp)
+    print(songs)
     newlyAddedIDs = list(data[data['song_id'].isin(songs)]['song_id'])
     newlyAddedArtists = list(data[data['song_id'].isin(songs)]['artist'])
 
     mode_cluster = list(data[data['song_id'].isin(newlyAddedIDs)]['k_cluster'].value_counts().index)[0]
 
     isolated_cluster = pd.DataFrame(data=data[data['k_cluster'] == mode_cluster])
-    print(newlyAddedArtists)
+
 
     artistsInCommon = list(isolated_cluster[isolated_cluster['artist'].isin(newlyAddedArtists) & ~(isolated_cluster['song_id'].isin(newlyAddedIDs))]['title'])
 
 
-    if len(artistsInCommon) != 0:
+    if len(artistsInCommon) == 0:
         recs = isolated_cluster.sample(n=50)
         print (recs)
         print(recs['title'], recs['artist'])
         return recs
     
-
+    else:
+        print("artists in common: ", artistsInCommon)
 
 def euclidianRecs(username):
     data = trainAndPredict()
@@ -115,13 +119,13 @@ def euclidianRecs(username):
 
 
 
-def collectUserSongs(username):
+def collectUserSongs(username, sp):
     with open("secret.txt", encoding="UTF-8") as file:
         clientid = file.readline().strip()
         clientsecret = file.readline().strip()
     scope = 'user-library-read'
     #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username="cassjhunt"))
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username=username))
+    #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username=username))
 
     songs = []
     results = sp.current_user_saved_tracks()
