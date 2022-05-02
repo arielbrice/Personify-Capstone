@@ -19,7 +19,6 @@ PATHSEC = HOMEDIR+"/secret.txt"
 PATHDB = HOMEDIR + "/dbconnection.txt" 
 # need to download the two files and save it under HOMEDIR
 
-
 app = Flask(__name__)
 app.config['SESSION_COOKIE_NAME'] = 'personify cookie'
 app.secret_key = "0Ncs92894fhno"
@@ -37,7 +36,7 @@ if not os.path.isdir(HOMEDIR):
 
 
 TOKEN_INFO = "token_info"
-
+songrecs = []
 with open("dbconnection.txt") as file:
     connectionString = file.readline().strip()
 
@@ -197,6 +196,9 @@ def makePlaylist():
     #value = tabulate(table, tablefmt='html')
 
     #print(tabulate(table))
+
+
+    songrecs.extend(recs["song_id"])
         
     return render_template("playlist.html", name = u['display_name'], playlist = zip(recs['title'], recs['artist']), title = recs['title'], artist = recs['artist'])
 
@@ -204,7 +206,19 @@ def makePlaylist():
 #TODO: export a playlist that is created from our algorithm
 @app.route('/export')
 def exportPlaylist():
-
+    try:
+        token_info = getToken()
+    except:
+        print("user not logged in")
+        return redirect(url_for('login', _external=False))
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+    playlist = sp.user_playlist_create(sp.me()['id'], "Test Personify Recs", public = False, description= "This playlist was made using your Zodiac sign and machine learning!")
+    playlist_id = playlist["id"]
+    if(songrecs == None):
+        return makePlaylist()
+    print(songrecs)
+    sp.playlist_add_items(playlist_id, songrecs[:25], position=None)
+    sp.playlist_add_items(playlist_id, songrecs[25:], position=None)
     return user()
 
 def getToken():
