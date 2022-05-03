@@ -102,14 +102,14 @@ def modeRecs(username, sp):
     artistsInCommon = list(isolated_cluster[isolated_cluster['artist'].isin(newlyAddedArtists) & ~(isolated_cluster['song_id'].isin(newlyAddedIDs))]['title'])
 
 
-    if len(artistsInCommon) == 0:
-        recs = isolated_cluster.sample(n=50)
-        print (recs)
-        print(recs['title'], recs['artist'])
-        return recs
+    #if len(artistsInCommon) == 0:
+    recs = isolated_cluster.sample(n=50)
+    print (recs)
+    print(recs['title'], recs['artist'])
+    return recs
     
-    else:
-        print("artists in common: ", artistsInCommon)
+    #else:
+        #print("artists in common: ", artistsInCommon)
 
 def euclidianRecs(username):
     data = trainAndPredict()
