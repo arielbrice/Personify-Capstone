@@ -65,8 +65,6 @@ def getToken():
     token_info = session.get(TOKEN_INFO, None)
     if not token_info:
         raise "exception"
-    now = int(time.time())
-    is_expired = token_info['expires_at'] - now < 60
     sp_oauth = create_spotify_oauth()
     if(sp_oauth.is_token_expired(token_info)):
         createToken()
@@ -79,9 +77,7 @@ def createToken():
         os.remove(".cache")
     try:
         token_info = sp_oauth.get_auth_response()
-        print("before")
         session[TOKEN_INFO] = token_info
-        print("after")
         return token_info
     except:
         print("exception")
