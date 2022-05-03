@@ -26,7 +26,7 @@ userCollection = db['users']
 
 # couldn't tell you what this is for
 def global_init():
-    with open("secret.txt") as file:
+    with open("dbconnection.txt") as file:
         connectionString = file.readline().strip()
 
     client = MongoClient(connectionString)
@@ -49,7 +49,6 @@ def trackExists(title):
     if (coll.count_documents({"title": title.strip()}, limit=1) == 0):
         return False
     else:
-        print(title, "duplicate")
         return True
 
 def insertTrack(features):

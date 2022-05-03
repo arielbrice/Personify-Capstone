@@ -195,7 +195,6 @@ def getSongs():
 #TODO: write creating a playlist function
 @app.route('/playlist')
 def makePlaylist():
-    print("in makePlaylist()")
     try:
         token_info = getToken()
     except:
@@ -205,10 +204,8 @@ def makePlaylist():
 
     u = sp.me()
     id = u['id']
-    print(id)
 
     recs = modeRecs(id, sp)
-    print("recs: ", recs)
     for itemt, itema in zip(recs['title'] , recs['artist']):
         print(itemt, itema)
     table = [['one','two','three'],['four','five','six'],['seven','eight','nine']]

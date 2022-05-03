@@ -1,47 +1,26 @@
-import spotipy
-import spotipy.util as util
 from pymongo import MongoClient
 import pandas as pd
 import mongoengine
 
-from matplotlib import pyplot as plt
-import mpl_toolkits
-from mpl_toolkits.mplot3d import Axes3D
-import sklearn
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import pairwise_distances_argmin_min
-from spotipy import SpotifyClientCredentials, SpotifyOAuth
 
-#from database import mongo_setup
-
-scaler = MinMaxScaler()
+import testing_billboard
 
 import numpy as np
+
 import os
 
 homeDIR = os.path.expanduser('~')
 
 DIRDB = homeDIR + "/.personify/dbconnection.txt"
 
-PATHSEC = homeDIR + "/.personify/secret.txt"  
-
-'''
-import pymongo
-import pandas as pd
-from pymongo import Connection
-connection = Connection()
-db = connection.database_name
-input_data = db.collection_name
-data = pd.DataFrame(list(input_data.find()))
-'''
-
+PATHSEC = homeDIR + "/.personify/secret.txt"
 
 with open("dbconnection.txt") as file:
     connectionString = file.readline().strip()
 
-
+scaler = MinMaxScaler()
 client = MongoClient(connectionString)
 db = client['Personify']
 trackCollection = db['Tracks']
@@ -59,7 +38,6 @@ def prepareData():
         x[item] = np.asarray(x[item])
 
     x = pd.DataFrame(data['analysis'].to_list(), columns=['acousticness', 'danceability','energy','instrumentalness','key','liveness','loudness','mode','speechiness'])
-    #print(x.head)
     x.drop(['mode'], axis=1)
     x.drop(['key'], axis=1)
     data = pd.concat([data, x], axis=1)
@@ -77,65 +55,42 @@ def trainAndPredict():
 
     data = pd.concat([data, kmeans_df], axis=1)
     data.drop(['analysis'], axis=1)
-    data.to_csv('updated-songs-w-clusters.csv')
     return data
 
-# euclidean distance for recommendations
-
-# get reccomendations
-
-#TODO: use to get the reccomended songs
 def modeRecs(username, sp):
-    print("in modeRecs with", username)
-    data = trainAndPredict()
-    print(data)
+    print("finding recs for", username)
     songs = collectUserSongs(username, sp)
-    print(songs)
+    data = trainAndPredict()
+
     newlyAddedIDs = list(data[data['song_id'].isin(songs)]['song_id'])
     newlyAddedArtists = list(data[data['song_id'].isin(songs)]['artist'])
 
+    print("cluster commonality:" ,list(data[data['song_id'].isin(newlyAddedIDs)]['k_cluster'].value_counts().index))
+
     mode_cluster = list(data[data['song_id'].isin(newlyAddedIDs)]['k_cluster'].value_counts().index)[0]
 
+    print("most common cluster: ", mode_cluster)
+
     isolated_cluster = pd.DataFrame(data=data[data['k_cluster'] == mode_cluster])
-
-
-    artistsInCommon = list(isolated_cluster[isolated_cluster['artist'].isin(newlyAddedArtists) & ~(isolated_cluster['song_id'].isin(newlyAddedIDs))]['title'])
-
-
-    #if len(artistsInCommon) == 0:
     recs = isolated_cluster.sample(n=50)
-    print (recs)
-    print(recs['title'], recs['artist'])
+
     return recs
-    
-    #else:
-        #print("artists in common: ", artistsInCommon)
-
-def euclidianRecs(username):
-    data = trainAndPredict()
-    songs = collectUserSongs(username)
-    modeRecs(username)
-
-
-
 
 def collectUserSongs(username, sp):
-    with open("secret.txt", encoding="UTF-8") as file:
-        clientid = file.readline().strip()
-        clientsecret = file.readline().strip()
-    scope = 'user-library-read'
-    #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username="cassjhunt"))
-    #sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=clientid, client_secret=clientsecret, redirect_uri='http://localhost:5000/redirect', scope=scope, username=username))
-
     songs = []
     results = sp.current_user_saved_tracks()
+
     for item in results['items']:
+        title = item['track']['name']
+        artist = item['track']['artists'][0]['name']
+
+        check = sp.search(q="{} {}".format(title, artist, limit=1))
+        tr = check['tracks']['items']
         songs.append(item['track']['id'])
+
+        testing_billboard.get_spotify_stats(title, artist, tr)
+
     return songs
-
-
-
-#euclidianRecs("arielbric4")
 
 '''
 print(scaled[y == 1,0], scaled[y == 1,1])

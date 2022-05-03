@@ -49,12 +49,12 @@ def get_spotify_stats(title, artist, track):
             for feat in song:
                 if feat in stat_keys:
                     stat_map[feat] = song[feat]
-
-        add_songs_to_db(stat_map)
+        if(mongo_setup.trackExists(title) == False):
+            add_songs_to_db(stat_map)
 
 def add_songs_to_db(song):
     mongo_setup.insertTrack(song)
-
+'''
 for year in range(2020,2021):
     for i in months:
         chart = billboard.ChartData('hot-100', date='{0}-{1}-15'.format(str(year), i))
@@ -78,10 +78,6 @@ for year in range(2020,2021):
                 stats = get_spotify_stats(row['title'], row['artist'], track)
         chart_df.to_csv('hot-100-{0}-{1}-15.csv'.format(str(year), i), sep=',', encoding='utf-8')
 
-
-
-
-"""
 Take the artists and songs from each df
 for each artist and song, do a search on spotify if it has not already been searched
 result = sp.search(q = keyword, limit=1)
@@ -91,4 +87,4 @@ for each spotify ID:
 create a database entry
 save the following information:
 Title, Artist, Spotify Song ID, Acousticness, Dancebility, Energy, Instrumentalness, Key, Liveness, Loudness, Mode, Speechiness, Tempo, Time_Signature, Valence
-"""
+'''
