@@ -75,7 +75,8 @@ def getToken():
 def createToken():
     sp_oauth = create_spotify_oauth()
 
-
+    if os.path.exists(".cache"):
+        os.remove(".cache")
     try:
         token_info = sp_oauth.get_auth_response()
         print("before")
