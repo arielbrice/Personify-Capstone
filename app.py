@@ -67,10 +67,24 @@ def getToken():
         raise "exception"
     now = int(time.time())
     is_expired = token_info['expires_at'] - now < 60
-    if(is_expired):
-        sp_oauth = create_spotify_oauth()
-        token_info = sp_oauth.get_refresh_access_token(token_info['refresh_token'])
+    sp_oauth = create_spotify_oauth()
+    if(sp_oauth.is_token_expired(token_info)):
+        createToken()
     return token_info
+
+def createToken():
+    sp_oauth = create_spotify_oauth()
+
+
+    try:
+        token_info = sp_oauth.get_auth_response()
+        print("before")
+        session[TOKEN_INFO] = token_info
+        print("after")
+        return token_info
+    except:
+        print("exception")
+        return None
 
 def create_spotify_oauth():
     clientid, clientsecret = readFile()
@@ -113,9 +127,9 @@ def login():
     sp_oauth = create_spotify_oauth()
     auth_url = sp_oauth.get_authorize_url()
     code = request.args.get('code')
-    token_info = sp_oauth.get_access_token(code)
+    #token_info = sp_oauth.get_access_token(code)
     try:
-        token_info = getToken()
+        token_info = createToken()
     except:
         
         print("user not logged in")
