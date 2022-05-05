@@ -19,6 +19,7 @@
 .new-playlist-btn{
     color: $darkPurple2;
     background-color: pink;
+    font-family: 'Comfortaa';
     font-weight: bold;
     font-size: 1.75em;
     height: fit-content + 2%;
@@ -29,6 +30,7 @@
 .export-playlist-btn{
     color: $darkPurple2;
     background-color: pink;
+    font-family: 'Comfortaa';
     font-weight: bold;
     font-size: 1.75em;
     height: fit-content + 2%;
@@ -38,7 +40,7 @@
     
     height: 100%;
   background-color: transparent;
-  font-family: Arial;
+  font-family: 'Comfortaa';
   display: flex;
   align-items: center;
   //align-items: right;
