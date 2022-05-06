@@ -2,8 +2,9 @@ from matplotlib import pyplot as plt
 from pymongo import MongoClient
 import pandas as pd
 import mongoengine
-
+from sklearn import preprocessing
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler
 
 import testing_billboard
@@ -96,6 +97,61 @@ def collectUserSongs(username, sp):
     return songs
 
 def visualize(scaled, y, data):
+    T = preprocessing.Normalizer().fit_transform(scaled)
+    n_clusters = 8
+    kmean_model = KMeans(n_clusters=n_clusters)
+    kmean_model.fit(T)
+    centroids, labels = kmean_model.cluster_centers_, kmean_model.labels_
+    pca_model = PCA(n_components=2)
+    pca_model.fit(T) # fit the model
+    T = pca_model.transform(T) # transform the 'normalized model'\
+    print(T)
+    # transform the 'centroids of KMean'
+    centroid_pca = pca_model.transform(centroids)
+    # print(centroid_pca)
+    # colors for plotting
+    colors = ['blue', 'pink', 'green', 'purple', 'black', 'brown', 'teal', 'yellow']
+    # assign a color to each features (note that we are using features as target)
+    features_colors = [ colors[labels[i]] for i in range(len(T)) ]
+    print(features_colors)
+    plt.scatter(T[:, 0], T[:, 1], 10,
+                c=features_colors, marker='o',
+                alpha=0.2
+            )
+            
+    # plot the PCA components
+    plt.scatter(T[:, 0], T[:, 1],
+                c=features_colors, marker='o',
+                alpha=0.2
+            )
+
+    # plot the centroids
+    '''
+    plt.scatter(centroid_pca[:, 0], centroid_pca[:, 1],
+                marker='x', s=100,
+                linewidths=3, c=colors
+            )
+    '''
+    # store the values of PCA component in variable: for easy writing
+    xvector = pca_model.components_[0] * max(T[:,0])
+    yvector = pca_model.components_[1] * max(T[:,1])
+    columns = data.columns
+    print(xvector)
+    print(yvector)
+
+    # plot the 'name of individual features' along with vector length
+    #for i in range(len(columns)):
+        # plot arrows
+     #   plt.arrow(0, 0, xvector[i], yvector[i],
+        #            color='b', width=0.0005,
+         #           head_width=0.02, alpha=0.75
+         #       )
+        # plot name of features
+        #plt.text(xvector[i], yvector[i], list(columns)[i], color='b', alpha=0.75)
+
+    plt.show()
+
+    '''
     data.to_csv("final-data-w-cluster.csv")
     print(scaled[y == 1,0], scaled[y == 1,1])
     # visualizing clusters
@@ -159,7 +215,7 @@ def visualize(scaled, y, data):
     print("loud\n",data.groupby(['k_cluster']).loudness.mean().sort_values(ascending=False))
     print("mode\n",data.groupby(['k_cluster']).mode.mean().sort_values(ascending=False))
     print("speech\n",data.groupby(['k_cluster']).speechiness.mean().sort_values(ascending=False))
-
+    '''
 
 '''
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=clientid, client_secret=clientsecret))
