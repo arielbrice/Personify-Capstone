@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from pymongo import MongoClient
 import pandas as pd
 import mongoengine
@@ -55,6 +56,7 @@ def trainAndPredict():
 
     data = pd.concat([data, kmeans_df], axis=1)
     data.drop(['analysis'], axis=1)
+    visualize(scaled, y, data)
     return data
 
 def modeRecs(username, sp):
@@ -77,57 +79,89 @@ def modeRecs(username, sp):
     return recs
 
 def collectUserSongs(username, sp):
+    print("in cUS with", username)
     songs = []
     results = sp.current_user_saved_tracks()
 
     for item in results['items']:
         title = item['track']['name']
         artist = item['track']['artists'][0]['name']
-
+        print(title, artist)
         check = sp.search(q="{} {}".format(title, artist, limit=1))
         tr = check['tracks']['items']
         songs.append(item['track']['id'])
 
         testing_billboard.get_spotify_stats(title, artist, tr)
-
+    print("songs", songs)
     return songs
 
+def visualize(scaled, y, data):
+    data.to_csv("final-data-w-cluster.csv")
+    print(scaled[y == 1,0], scaled[y == 1,1])
+    # visualizing clusters
+    fig, ax = plt.subplots(figsize=(10,8))
+    #ax = fig.add_subplot(111)
+
+    plt.xticks(np.arange(0,1,step=0.2))
+    plt.yticks(np.arange(0,1,step=0.2))
+    fig0 = plt.scatter(scaled[y == 0,0],scaled[y == 0,1], s= 10, c= 'red', alpha=0.20, label= 'Cluster 0')
+    plt.figure()
+
+    plt.xticks(np.arange(0, 1, step=0.2))
+    plt.yticks(np.arange(0, 1, step=0.2))
+    fig1 = plt.scatter(scaled[y == 1,0], scaled[y == 1,1], s= 10, c= 'blue',  alpha=0.20, label= 'Cluster 1')
+    plt.figure()
+
+    plt.xticks(np.arange(0, 1, step=0.2))
+    plt.yticks(np.arange(0, 1, step=0.2))
+    fig2 = plt.scatter(scaled[y == 2,0], scaled[y == 2,1], s= 10, c= 'green',  alpha=0.20, label= 'Cluster 2')
+    plt.figure()
+
+    plt.xticks(np.arange(0, 1, step=0.2))
+    plt.yticks(np.arange(0, 1, step=0.2))
+    fig3 = plt.scatter(scaled[y == 3,0], scaled[y == 3,1], s= 10, c= 'teal',  alpha=0.20, label= 'Cluster 3')
+    plt.figure()
+
+    plt.xticks(np.arange(0, 1, step=0.2))
+    plt.yticks(np.arange(0, 1, step=0.2))
+    fig4 = plt.scatter(scaled[y == 4,0], scaled[y == 4,1], s= 10, c= 'maroon',  alpha=0.20, label= 'Cluster 4')
+    plt.figure()
+
+    plt.xticks(np.arange(0, 1, step=0.2))
+    plt.yticks(np.arange(0, 1, step=0.2))
+    fig5 = plt.scatter(scaled[y == 5,0], scaled[y == 5,1], s= 10, c= 'darkorange',  alpha=0.20, label= 'Cluster 5')
+    plt.figure()
+
+    plt.xticks(np.arange(0, 1, step=0.2))
+    plt.yticks(np.arange(0, 1, step=0.2))
+    fig6 = plt.scatter(scaled[y == 6,0], scaled[y == 6,1], s= 10, c= 'purple',  alpha=0.20, label= 'Cluster 6')
+    plt.figure()
+
+    plt.xticks(np.arange(0, 1, step=0.2))
+    plt.yticks(np.arange(0, 1, step=0.2))
+    fig7 = plt.scatter(scaled[y == 7,0], scaled[y == 7,1], s= 10, c= 'magenta',  alpha=0.20, label= 'Cluster 7')
+    plt.figure()
+
+    # centroids
+    #plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:,1], s= 25, c= 'yellow',  alpha=0.5, label= 'Centroids')
+
+    #plt.title('Cluster 7')
+    #plt.legend()
+    #plt.savefig('clusters.png')
+    plt.show()
+
+    print("dance\n", data.groupby(['k_cluster']).acousticness.mean().sort_values(ascending=False))
+    print("dance\n", data.groupby(['k_cluster']).danceability.mean().sort_values(ascending=False))
+    print("energy\n", data.groupby(['k_cluster']).energy.mean().sort_values(ascending=False))
+    print("instrulmentalness\n", data.groupby(['k_cluster']).instrumentalness.mean().sort_values(ascending=False))
+    print("key\n", data.groupby(['k_cluster']).key.mean().sort_values(ascending=False))
+    print("liveness\n", data.groupby(['k_cluster']).liveness.mean().sort_values(ascending=False))
+    print("loud\n",data.groupby(['k_cluster']).loudness.mean().sort_values(ascending=False))
+    print("mode\n",data.groupby(['k_cluster']).mode.mean().sort_values(ascending=False))
+    print("speech\n",data.groupby(['k_cluster']).speechiness.mean().sort_values(ascending=False))
+
+
 '''
-print(scaled[y == 1,0], scaled[y == 1,1])
-# visualizing clusters
-fig, ax = plt.subplots(figsize=(10,8))
-ax = fig.add_subplot(111, projection='3d')
-
-
-#plt.scatter(scaled[y == 0,0],scaled[y == 0,1], s= 10, c= 'red', alpha=0.20, label= 'Cluster 0')
-#plt.scatter(scaled[y == 1,0], scaled[y == 1,1], s= 10, c= 'blue',  alpha=0.20, label= 'Cluster 1')
-#plt.scatter(scaled[y == 2,0], scaled[y == 2,1], s= 10, c= 'green',  alpha=0.20, label= 'Cluster 2')
-#plt.scatter(scaled[y == 3,0], scaled[y == 3,1], s= 10, c= 'cyan',  alpha=0.20, label= 'Cluster 3')
-#plt.scatter(scaled[y == 4,0], scaled[y == 4,1], s= 10, c= 'yellow',  alpha=0.20, label= 'Cluster 4')
-#plt.scatter(scaled[y == 5,0], scaled[y == 5,1], s= 10, c= 'orange',  alpha=0.20, label= 'Cluster 5')
-#plt.scatter(scaled[y == 6,0], scaled[y == 6,1], s= 10, c= 'purple',  alpha=0.20, label= 'Cluster 6')
-plt.scatter(scaled[y == 7,0], scaled[y == 7,1], s= 10, c= 'aquamarine',  alpha=0.20, label= 'Cluster 7')
-
-# centroids
-#plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:,1], s= 25, c= 'yellow',  alpha=0.5, label= 'Centroids')
-
-plt.title('Cluster 7')
-#plt.legend()
-plt.savefig('clusters.png')
-plt.show()
-
-
-print("dance\n", data.groupby(['k_cluster']).danceability.mean().sort_values(ascending=False))
-print("energy\n", data.groupby(['k_cluster']).energy.mean().sort_values(ascending=False))
-print("instrulmentalness\n", data.groupby(['k_cluster']).instrumentalness.mean().sort_values(ascending=False))
-print("key\n", data.groupby(['k_cluster']).key.mean().sort_values(ascending=False))
-print("liveness\n", data.groupby(['k_cluster']).liveness.mean().sort_values(ascending=False))
-print("loud\n",data.groupby(['k_cluster']).loudness.mean().sort_values(ascending=False))
-print("mode\n",data.groupby(['k_cluster']).mode.mean().sort_values(ascending=False))
-print("speech\n",data.groupby(['k_cluster']).speechiness.mean().sort_values(ascending=False))
-
-
-
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=clientid, client_secret=clientsecret))
 
 with open("../../secret.txt", encoding="UTF-8") as file:
